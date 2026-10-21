@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>٦٠ ثانية.. تفرق | سر الوصفة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <style>
+    body { font-family: 'Tajawal', 'Cairo', sans-serif; background: radial-gradient(circle at top right, #f3f0ff 0%, #f8fafc 40%, #eef2ff 100%); min-height: 100vh; }
+  </style>
+</head>
+<body class="text-slate-800 antialiased pb-16">
+  <header class="w-full bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white shadow-md">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">٦٠ ثانية.. تفرق</h1>
+          <p class="text-xs text-slate-500">اقرأ المعلومة ثم أجب عن السؤال أدناه</p>
+        </div>
+      </div>
+      <span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200">تحدي معرفي</span>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 pt-6 space-y-5">
+    <div class="rounded-2xl bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 text-white p-6 shadow-lg">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-500 text-white mb-2">سر الوصفة</span>
+      <h2 class="text-xl sm:text-2xl font-bold">٦٠ ثانية.. تفرق</h2>
+    </div>
+
+    <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-2">
+      <h3 class="text-xs font-bold uppercase tracking-wider text-amber-700">المعلومة التثقيفية</h3>
+      <p class="text-slate-800 leading-relaxed text-base sm:text-lg whitespace-pre-line">وصفته مو حبوب ولا شراب، أخصائي التثقيف الصحي (المدرب الصحي) يصمم برامج توعوية تساعد الناس على فهم المعلومات الصحية وتحويلها إلى سلوكيات يومية أفضل.
+
+سر الوصفة؟ معلومة صحيحة، بأسلوب مناسب، وخطوة عملية تقدر تطبقها.</p>
+    </section>
+
+    <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="border-b border-slate-100 pb-2">
+        <span class="text-xs font-bold text-indigo-600 uppercase">السؤال التفاعلي</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1">أي من التالي مثال على التثقيف الصحي (المدرب الصحي)؟</h3>
+      </div>
+      <div id="optionsList" class="space-y-3"></div>
+      <div id="feedback" class="hidden rounded-xl p-4 border transition-all duration-300">
+        <h4 id="fbTitle" class="font-bold text-base"></h4>
+        <p id="fbText" class="text-sm mt-1"></p>
+      </div>
+      <div id="retryRow" class="hidden pt-2 flex justify-end">
+        <button id="btnRetry" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg border border-slate-200">إعادة التجربة</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const data = {
+      options: [
+        "تقديم نصائح عامة دون مراعاة الجمهور",
+        "تصميم برنامج يساعد الناس على الوقاية من الأمراض",
+        "صرف دواء للمريض"
+      ],
+      correct: 1,
+      explanation: "أخصائي التثقيف الصحي يصمم برامج توعوية ووقائية مخصصة لتمكين الأفراد من تبني نمط حياة صحي، ولا يصف أدوية أو يقدم نصائح عشوائية."
+    };
+    let answered = false;
+
+    function render() {
+      const container = document.getElementById('optionsList');
+      container.innerHTML = '';
+      data.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        let cls = "w-full text-right p-4 rounded-xl border text-sm font-semibold transition flex items-center justify-between ";
+        if (!answered) {
+          cls += "border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 bg-white text-slate-800";
+          btn.className = cls;
+          btn.innerHTML = `<span class="flex items-center gap-3"><span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center">${String.fromCharCode(65+idx)}</span><span>${opt}</span></span><span class="w-4 h-4 rounded-full border border-slate-300"></span>`;
+          btn.onclick = () => select(idx);
+        } else {
+          const isCorrect = idx === data.correct;
+          cls += isCorrect ? "border-emerald-500 bg-emerald-50 text-emerald-950 font-bold" : "border-slate-100 bg-slate-50 text-slate-400 opacity-60";
+          btn.className = cls;
+          btn.disabled = true;
+          btn.innerHTML = `<span class="flex items-center gap-3"><span class="w-7 h-7 rounded-lg ${isCorrect?'bg-emerald-600 text-white':'bg-slate-200 text-slate-500'} text-xs font-bold flex items-center justify-center">${String.fromCharCode(65+idx)}</span><span>${opt}</span></span>${isCorrect?'<span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">إجابة صحيحة ✓</span>':''}`;
+        }
+        container.appendChild(btn);
+      });
+    }
+
+    function select(idx) {
+      if (answered) return;
+      answered = true;
+      const fb = document.getElementById('feedback');
+      const retry = document.getElementById('retryRow');
+      fb.classList.remove('hidden');
+      retry.classList.remove('hidden');
+      if (idx === data.correct) {
+        try { confetti({ particleCount: 75, spread: 65, origin: { y: 0.6 } }); } catch(e){}
+        fb.className = "rounded-xl p-4 border bg-emerald-50 border-emerald-200 text-emerald-900";
+        document.getElementById('fbTitle').textContent = "إجابة صحيحة، أحسنت! 🎉";
+        document.getElementById('fbText').textContent = data.explanation;
+      } else {
+        fb.className = "rounded-xl p-4 border bg-rose-50 border-rose-200 text-rose-900";
+        document.getElementById('fbTitle').textContent = "إجابة غير صحيحة!";
+        document.getElementById('fbText').textContent = `الإجابة الصحيحة هي: "${data.options[data.correct]}". ${data.explanation}`;
+      }
+      render();
+    }
+
+    document.getElementById('btnRetry').onclick = () => { answered = false; document.getElementById('feedback').classList.add('hidden'); document.getElementById('retryRow').classList.add('hidden'); render(); };
+    render();
+  </script>
+</body>
+</html>
